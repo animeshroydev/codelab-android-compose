@@ -133,17 +133,21 @@ fun FavoriteCollectionCard(
         shape = MaterialTheme.shapes.medium,
         modifier = modifier
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.width(255.dp)) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.width(255.dp)
+        ) {
             Image(
                 painter = painterResource(drawable),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.size(80.dp)
             )
-            Text(text = stringResource(text),
+            Text(
+                text = stringResource(text),
                 style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(horizontal = 16.dp))
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
         }
     }
 }
@@ -156,7 +160,6 @@ fun AlignYourBodyRow(
     LazyRow(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(8.dp),
-        contentPadding = PaddingValues( 16.dp),
     ) {
         items(alignYourBodyData) { item ->
             AlignYourBodyElement(drawable = item.drawable, text = item.text)
@@ -186,9 +189,20 @@ fun FavoriteCollectionsGrid(
 // Step: Home section - Slot APIs
 @Composable
 fun HomeSection(
-    modifier: Modifier = Modifier
+    @StringRes title: Int,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
 ) {
-    // Implement composable here
+    Column(modifier) {
+        Text(
+            text = stringResource(title),
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier
+                .paddingFromBaseline(top = 30.dp, bottom = 16.dp)
+                .padding(horizontal = 16.dp)
+        )
+        content()
+    }
 }
 
 // Step: Home screen - Scrolling
@@ -228,8 +242,14 @@ fun MySootheApp() {
 
     Column {
         SearchBar(modifier = Modifier.padding(8.dp))
-        AlignYourBodyRow()
-        FavoriteCollectionsGrid()
+
+        HomeSection(R.string.align_your_body) {
+            AlignYourBodyRow()
+        }
+        HomeSection(R.string.favorite_collections) {
+            FavoriteCollectionsGrid()
+        }
+
     }
 }
 
@@ -297,7 +317,12 @@ fun AlignYourBodyRowPreview() {
 @Preview(showBackground = true, backgroundColor = 0xFFF5F0EE)
 @Composable
 fun HomeSectionPreview() {
-    MySootheTheme { HomeSection() }
+    MySootheTheme {
+        HomeSection(R.string.align_your_body) {
+            AlignYourBodyRow()
+        }
+
+    }
 }
 
 @Preview(showBackground = true, backgroundColor = 0xFFF5F0EE)
